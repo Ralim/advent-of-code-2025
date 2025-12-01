@@ -8,6 +8,10 @@ pub fn get_question_data_lines(day: ChallengeDay, question: Question) -> Vec<Str
     return lines;
 }
 
+pub fn get_question_data_line(day: ChallengeDay, question: Question) -> String {
+    let file_path = day.get_question_file_path(question);
+    std::fs::read_to_string(&file_path).expect(&format!("Failed to read file: {}", file_path))
+}
 pub fn get_question_data_as_2d_matrix(day: ChallengeDay, question: Question) -> Vec<Vec<u8>> {
     let file_path = day.get_question_file_path(question);
     let contents =
