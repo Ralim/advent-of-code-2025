@@ -1,5 +1,4 @@
-use rayon::prelude::*;
-use shared::{ChallengeDay, Question, get_question_data_line};
+use shared::{ChallengeDay, DecimalDigits, Question, get_question_data_line};
 
 fn parse_pair(pair: &str) -> (u64, u64) {
     let (start, stop) = pair.trim().split_once('-').unwrap();
@@ -17,6 +16,7 @@ fn get_pairs(question: Question) -> Vec<(u64, u64)> {
         .map(parse_pair)
         .collect::<Vec<(u64, u64)>>()
 }
+
 fn main() {
     let t_a = std::thread::spawn(|| {
         let ans = part_a(Question::Question);
@@ -41,9 +41,11 @@ fn part_a(question: Question) -> u64 {
             if (x.ilog10() + 1) % 2 == 0 {
                 // Even number of digits
                 // Check if the stringification of it a pattern repeating twice like 7878
-                let s = x.to_string();
-                let first = s.chars().take(s.len() / 2);
-                let second = s.chars().skip(s.len() / 2);
+                let iter = DecimalDigits::from(x);
+                let iter2 = DecimalDigits::from(x);
+                let len = iter.len();
+                let first = iter.take(len / 2);
+                let second = iter2.skip(len / 2);
                 if first.eq(second) {
                     invalid_id_count += x;
                 }
@@ -52,6 +54,7 @@ fn part_a(question: Question) -> u64 {
     }
     invalid_id_count
 }
+
 fn part_b(question: Question) -> u64 {
     println!("Starting Part B");
     let data = get_pairs(question);
@@ -62,17 +65,19 @@ fn part_b(question: Question) -> u64 {
         for x in start..=stop {
             // Even number of digits
             // Check if the stringification of it a pattern repeating twice like 7878 or 787878
-            let s = x.to_string();
-            for segment_length in 1..s.len() {
-                let tail_len = s.len() - segment_length;
+            let len = x.ilog10() + 1;
+            for segment_length in 1..len {
+                let iter = DecimalDigits::from(x);
+                let iter2 = DecimalDigits::from(x);
+                let tail_len = len - segment_length;
                 if (tail_len) % segment_length != 0 {
                     continue;
                 }
-                let first = s.chars().take(segment_length);
-                let second = s.chars().skip(segment_length);
+                let first = iter.take(segment_length as usize);
+                let second = iter2.skip(segment_length as usize);
 
                 // Check first repeated repeats times is second
-                let extended_first = first.cycle().take(tail_len);
+                let extended_first = first.cycle().take(tail_len as usize);
                 if extended_first.eq(second) {
                     invalid_id_count += x;
                     break;
