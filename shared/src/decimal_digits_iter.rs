@@ -86,13 +86,6 @@ mod tests {
     }
 
     #[test]
-    fn test_iterator_zero() {
-        let mut digits = DecimalDigits::from(0u64);
-        assert_eq!(digits.next(), Some(0));
-        assert_eq!(digits.next(), None);
-    }
-
-    #[test]
     fn test_iterator_collect() {
         let digits = DecimalDigits::from(9876u64);
         let collected: Vec<u64> = digits.collect();

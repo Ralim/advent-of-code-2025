@@ -27,14 +27,14 @@ mod tests {
 
     #[test]
     fn test_get_day_input_file_lines() {
-        let lines = get_question_data_lines(ChallengeDay::Test, Question::Question1);
+        let lines = get_question_data_lines(ChallengeDay::Test, Question::Question);
         assert!(!lines.is_empty());
         assert!(lines.iter().all(|line| line.is_ascii()));
     }
 
     #[test]
     fn test_get_day_input_file_bytes() {
-        let bytes = get_question_data_as_2d_matrix(ChallengeDay::Test, Question::Question1);
+        let bytes = get_question_data_as_2d_matrix(ChallengeDay::Test, Question::Question);
         assert!(!bytes.is_empty());
         assert!(
             bytes
@@ -45,8 +45,8 @@ mod tests {
 
     #[test]
     fn test_consistency_between_lines_and_bytes() {
-        let lines = get_question_data_lines(ChallengeDay::Test, Question::Question1);
-        let bytes = get_question_data_as_2d_matrix(ChallengeDay::Test, Question::Question1);
+        let lines = get_question_data_lines(ChallengeDay::Test, Question::Question);
+        let bytes = get_question_data_as_2d_matrix(ChallengeDay::Test, Question::Question);
 
         assert_eq!(lines.len(), bytes.len());
 
