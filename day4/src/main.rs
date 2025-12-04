@@ -1,5 +1,5 @@
 use array2d::Array2D;
-use shared::{ChallengeDay, Question, get_question_data_to_grid};
+use shared::{Adjacents, ChallengeDay, Question, adjacent_positions, get_question_data_to_grid};
 
 fn main() {
     let t_a = std::thread::spawn(|| {
@@ -40,31 +40,19 @@ fn part_b(question: Question) -> u64 {
 
 fn find_valid_ones(input_file: &Array2D<u8>) -> Vec<(usize, usize)> {
     let mut valid_positions = Vec::new();
-    for (pos, value) in input_file.enumerate_row_major() {
-        if *value == b'@' {
-            let mut count = 0;
-            for row_offset in -1..=1 {
-                for col_offset in -1..=1 {
-                    let new_row: i32 = pos.0 as i32 + row_offset;
-                    let new_col: i32 = pos.1 as i32 + col_offset;
-                    if new_row >= 0
-                        && new_row < input_file.num_rows() as i32
-                        && new_col >= 0
-                        && new_col < input_file.num_columns() as i32
-                    {
-                        let new_pos = (new_row as usize, new_col as usize);
-                        if new_pos != pos
-                            && input_file.get(new_pos.0, new_pos.1).unwrap_or(&b' ') == &b'@'
-                        {
-                            count += 1;
-                        }
-                    }
-                }
+    for pos in input_file
+        .enumerate_row_major()
+        .filter_map(|(p, v)| if *v == b'@' { Some(p) } else { None })
+    {
+        let mut count = 0;
+        for new_pos in adjacent_positions(input_file, pos, Adjacents::ALL) {
+            if new_pos != pos && input_file.get(new_pos.0, new_pos.1).unwrap_or(&b' ') == &b'@' {
+                count += 1;
             }
+        }
 
-            if count < 4 {
-                valid_positions.push(pos);
-            }
+        if count < 4 {
+            valid_positions.push(pos);
         }
     }
     valid_positions

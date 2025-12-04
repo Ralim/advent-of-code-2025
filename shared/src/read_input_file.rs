@@ -4,22 +4,23 @@ use crate::{ChallengeDay, input_files::Question};
 
 pub fn get_question_data_lines(day: ChallengeDay, question: Question) -> Vec<String> {
     let file_path = day.get_question_file_path(question);
-    let contents =
-        std::fs::read_to_string(&file_path).expect(&format!("Failed to read file: {}", file_path));
+    let contents = std::fs::read_to_string(&file_path)
+        .unwrap_or_else(|_| panic!("Failed to read file: {}", file_path));
     let lines: Vec<String> = contents.lines().map(|s| s.to_string()).collect();
-    return lines;
+    lines
 }
 
 pub fn get_question_data_line(day: ChallengeDay, question: Question) -> String {
     let file_path = day.get_question_file_path(question);
-    std::fs::read_to_string(&file_path).expect(&format!("Failed to read file: {}", file_path))
+    std::fs::read_to_string(&file_path)
+        .unwrap_or_else(|_| panic!("Failed to read file: {}", file_path))
 }
 pub fn get_question_data_as_2d_matrix(day: ChallengeDay, question: Question) -> Vec<Vec<u8>> {
     let file_path = day.get_question_file_path(question);
-    let contents =
-        std::fs::read_to_string(&file_path).expect(&format!("Failed to read file: {}", file_path));
+    let contents = std::fs::read_to_string(&file_path)
+        .unwrap_or_else(|_| panic!("Failed to read file: {}", file_path));
     let bytes: Vec<Vec<u8>> = contents.lines().map(|s| s.bytes().collect()).collect();
-    return bytes;
+    bytes
 }
 
 pub fn get_question_data_to_grid(day: ChallengeDay, question: Question) -> Array2D<u8> {
