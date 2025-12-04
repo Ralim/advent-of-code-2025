@@ -1,3 +1,5 @@
+use array2d::Array2D;
+
 use crate::{ChallengeDay, input_files::Question};
 
 pub fn get_question_data_lines(day: ChallengeDay, question: Question) -> Vec<String> {
@@ -18,6 +20,29 @@ pub fn get_question_data_as_2d_matrix(day: ChallengeDay, question: Question) -> 
         std::fs::read_to_string(&file_path).expect(&format!("Failed to read file: {}", file_path));
     let bytes: Vec<Vec<u8>> = contents.lines().map(|s| s.bytes().collect()).collect();
     return bytes;
+}
+
+pub fn get_question_data_to_grid(day: ChallengeDay, question: Question) -> Array2D<u8> {
+    let file_path = day.get_question_file_path(question);
+    let file_contents = std::fs::read_to_string(&file_path).unwrap();
+    let lines: Vec<&str> = file_contents.lines().collect();
+    let filtered_file = file_contents.replace("\n", "").replace("\r", "");
+
+    Array2D::from_row_major(filtered_file.as_bytes(), lines[0].len(), lines.len()).unwrap()
+}
+
+pub fn get_question_data_to_num_grid(day: ChallengeDay, question: Question) -> Array2D<i64> {
+    let file_path = day.get_question_file_path(question);
+    let file_contents = std::fs::read_to_string(&file_path).unwrap();
+    let lines: Vec<&str> = file_contents.lines().collect();
+    let filtered_file = file_contents.replace("\n", "").replace("\r", "");
+    let values: Vec<i64> = filtered_file
+        .as_bytes()
+        .iter()
+        .map(|&a| (a - b'0') as i64)
+        .collect();
+
+    Array2D::from_row_major(&values, lines[0].len(), lines.len()).unwrap()
 }
 
 #[cfg(test)]
