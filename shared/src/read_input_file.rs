@@ -48,9 +48,20 @@ pub fn get_question_data_to_grid(day: ChallengeDay, question: Question) -> Array
     let file_path = day.get_question_file_path(question);
     let file_contents = std::fs::read_to_string(&file_path).unwrap();
     let lines: Vec<&str> = file_contents.lines().collect();
-    let filtered_file = file_contents.replace("\n", "").replace("\r", "");
+    let max_line_len = lines.iter().map(|l| l.len()).max().unwrap_or(0);
+    // Pad all lines with spaces to the maximum length
+    let padded_lines: Vec<String> = lines
+        .iter()
+        .map(|l| l.to_string() + &" ".repeat(max_line_len - l.len()))
+        .collect();
+    let joined_padded_lines = padded_lines.join("");
 
-    Array2D::from_row_major(filtered_file.as_bytes(), lines[0].len(), lines.len()).unwrap()
+    Array2D::from_row_major(
+        joined_padded_lines.as_bytes(),
+        padded_lines.len(),
+        max_line_len,
+    )
+    .unwrap()
 }
 
 pub fn get_question_data_to_num_grid(day: ChallengeDay, question: Question) -> Array2D<i64> {
