@@ -52,13 +52,12 @@ pub fn infill_poly(data: &mut Array2D<u8>, point_marker: u8) {
         }
 
         // Handle odd number of crossings - fill to the end
-        if crossings.len() % 2 == 1 {
-            if let Some(&last_crossing) = crossings.last() {
+        if crossings.len() % 2 == 1
+            && let Some(&last_crossing) = crossings.last() {
                 for x in (last_crossing + 1)..cols {
                     data.set(y, x, point_marker).unwrap();
                 }
             }
-        }
     }
 }
 

@@ -23,7 +23,7 @@ where
         .filter(|(_, value)| *value != &wall)
         .map(|(pos, _value)| {
             // Check all of the surrounding positions
-            let adjacent_positions = adjacent_positions(&maze, pos, Adjacents::CROSS);
+            let adjacent_positions = adjacent_positions(maze, pos, Adjacents::CROSS);
             let mut edges = Vec::new();
             for adjacent_position in adjacent_positions {
                 let adjacent_cell_value =
