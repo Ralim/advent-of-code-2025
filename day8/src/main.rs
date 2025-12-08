@@ -70,17 +70,15 @@ fn load_question_graph(question: Question) -> Graph<String, ()> {
 
     let mut graph_edges: Vec<Arc<Edge<String, ()>>> = vec![];
 
-    for junction_box in junction_boxes.iter() {
-        // Add an edge to all other junction boxes
-        for other_box in junction_boxes.iter() {
-            if junction_box != other_box {
-                let distance = ((junction_box.3 - other_box.3).pow(2)
-                    + (junction_box.1 - other_box.1).pow(2)
-                    + (junction_box.2 - other_box.2).pow(2)) as f64;
-                let edge =
-                    Edge::with_weight(junction_box.0.clone(), other_box.0.clone(), distance.sqrt());
-                graph_edges.push(edge);
-            }
+    // Add an edge to all other junction boxes, so we make it a fully connected graph
+    for (index, junction_box) in junction_boxes.iter().enumerate() {
+        for other_box in junction_boxes.iter().skip(index + 1) {
+            let distance = ((junction_box.3 - other_box.3).pow(2)
+                + (junction_box.1 - other_box.1).pow(2)
+                + (junction_box.2 - other_box.2).pow(2)) as f64;
+            let edge =
+                Edge::with_weight(junction_box.0.clone(), other_box.0.clone(), distance.sqrt());
+            graph_edges.push(edge);
         }
     }
     // Have it allow edge repeating
