@@ -1,4 +1,5 @@
 use array2d::Array2D;
+use rayon::prelude::*;
 use shared::{ChallengeDay, Question, get_question_data_lines};
 use std::collections::HashMap;
 
@@ -364,7 +365,7 @@ impl Machine {
 fn part_a(question: Question) -> usize {
     println!("Starting Part A");
     load_machines(question)
-        .into_iter()
+        .into_par_iter()
         .map(|machine| machine.find_optimal_button_presses_count())
         .sum()
 }
@@ -372,7 +373,7 @@ fn part_a(question: Question) -> usize {
 fn part_b(question: Question) -> usize {
     println!("Starting Part B");
     load_machines(question)
-        .into_iter()
+        .into_par_iter()
         .map(|machine| {
             let presses = machine.find_optimal_button_presses_for_voltage();
             assert!(presses > 0);
