@@ -1,6 +1,6 @@
+use graphrs::{Edge, Graph, GraphSpecs};
 use std::sync::Arc;
 
-use graphrs::{Edge, Graph, GraphSpecs};
 pub fn file_lines_to_graph<F>(lines: &Vec<&str>, line_mapper: F) -> Graph<String, ()>
 where
     F: Fn(&str) -> Vec<Arc<Edge<String, ()>>>,
@@ -9,6 +9,19 @@ where
         lines.iter().flat_map(|line| line_mapper(line)).collect();
 
     let mut graph: Graph<String, ()> = Graph::new(GraphSpecs::undirected_create_missing());
+
+    graph.add_edges(graph_edges).unwrap();
+
+    graph
+}
+pub fn file_lines_to_graph_directed<F>(lines: &Vec<String>, line_mapper: F) -> Graph<String, ()>
+where
+    F: Fn(&str) -> Vec<Arc<Edge<String, ()>>>,
+{
+    let graph_edges: Vec<Arc<Edge<String, ()>>> =
+        lines.iter().flat_map(|line| line_mapper(line)).collect();
+
+    let mut graph: Graph<String, ()> = Graph::new(GraphSpecs::directed_create_missing());
 
     graph.add_edges(graph_edges).unwrap();
 

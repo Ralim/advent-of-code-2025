@@ -2,8 +2,7 @@
 pub enum Question {
     Question,
     Sample,
-    #[cfg(test)]
-    ManyMatrix,
+    AltSample,
 }
 
 impl std::fmt::Display for Question {
@@ -11,8 +10,7 @@ impl std::fmt::Display for Question {
         let s: &str = match self {
             Question::Question => "input",
             Question::Sample => "sample",
-            #[cfg(test)]
-            Question::ManyMatrix => "many_matrix",
+            Question::AltSample => "alt_sample",
         };
         write!(f, "{}", s)
     }

@@ -92,7 +92,7 @@ mod tests {
     #[test]
     fn test_get_question_data_as_2d_matrices_lb_sep() {
         let matrices =
-            get_question_data_as_2d_matrices_lb_sep(ChallengeDay::Test, Question::ManyMatrix);
+            get_question_data_as_2d_matrices_lb_sep(ChallengeDay::Test, Question::AltSample);
         assert!(!matrices.is_empty());
         let expected_matrix = Array2D::from_row_major(
             &[
@@ -118,8 +118,7 @@ mod tests {
 
     #[test]
     fn test_get_question_data_lines_split_lb() {
-        let line_groups =
-            get_question_data_lines_split_lb(ChallengeDay::Test, Question::ManyMatrix);
+        let line_groups = get_question_data_lines_split_lb(ChallengeDay::Test, Question::AltSample);
         assert!(!line_groups.is_empty());
         assert_eq!(line_groups.len(), 2);
 
