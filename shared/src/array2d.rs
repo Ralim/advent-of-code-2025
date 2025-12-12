@@ -37,6 +37,20 @@ pub fn print_array(array: &Array2D<u8>) {
     println!();
 }
 
+pub fn print_array_bool(array: &Array2D<bool>) {
+    println!();
+    for row_iter in array.rows_iter() {
+        for element in row_iter {
+            match element {
+                true => print!("#"),
+                false => print!("."),
+            }
+        }
+        println!();
+    }
+    println!();
+}
+
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum Directions {
     UP,

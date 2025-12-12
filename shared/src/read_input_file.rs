@@ -36,9 +36,15 @@ pub fn get_question_data_as_2d_matrices_lb_sep(
     // Break on empty lines
     lines
         .into_iter()
+        // Filter to reject any where any line contains an 'x'
+        .filter(|lines| !lines.iter().any(|line| line.contains('x')))
         .map(|lines| {
             // Convert lines from &[&str} to Vec<Vec<u8>>
-            let rows: Vec<Vec<u8>> = lines.iter().map(|l| l.as_bytes().to_vec()).collect();
+            let rows: Vec<Vec<u8>> = lines
+                .iter()
+                .map(|l| l.as_bytes().to_vec())
+                .filter(|row| !row.contains(&b':'))
+                .collect();
             println!("Rows: {:?}", rows);
             Array2D::from_rows(&rows).unwrap()
         })
