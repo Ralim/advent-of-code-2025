@@ -1,9 +1,6 @@
-use std::{collections::HashSet, panic};
-
 use array2d::Array2D;
 use shared::{
     ChallengeDay, Question, get_question_data_as_2d_matrices_lb_sep, get_question_data_lines,
-    rotate_array,
 };
 fn main() {
     let t_a = std::thread::spawn(|| {
@@ -58,54 +55,6 @@ struct Shape {
     default_state: Array2D<u8>,
 }
 impl Shape {
-    //ROT 90 clockwise
-    fn rotate_90(&self) -> Shape {
-        Shape {
-            default_state: rotate_array(self.default_state.clone()),
-        }
-    }
-    fn bounding_area(&self) -> usize {
-        let rows = self.default_state.num_rows();
-        let cols = self.default_state.num_columns();
-        rows * cols
-    }
-
-    fn flip_horizontal(&self) -> Shape {
-        let rows = self.default_state.num_rows();
-        let cols = self.default_state.num_columns();
-        let mut flipped_data = Vec::new();
-
-        for row in 0..rows {
-            let mut flipped_row = Vec::new();
-            for col in (0..cols).rev() {
-                flipped_row.push(self.default_state[(row, col)]);
-            }
-            flipped_data.push(flipped_row);
-        }
-
-        Shape {
-            default_state: Array2D::from_rows(&flipped_data).unwrap(),
-        }
-    }
-
-    fn flip_vertical(&self) -> Shape {
-        let rows = self.default_state.num_rows();
-        let cols = self.default_state.num_columns();
-        let mut flipped_data = Vec::new();
-
-        for row in (0..rows).rev() {
-            let mut flipped_row = Vec::new();
-            for col in 0..cols {
-                flipped_row.push(self.default_state[(row, col)]);
-            }
-            flipped_data.push(flipped_row);
-        }
-
-        Shape {
-            default_state: Array2D::from_rows(&flipped_data).unwrap(),
-        }
-    }
-
     fn filled_area(&self) -> usize {
         self.default_state
             .as_row_major()
@@ -120,23 +69,9 @@ impl From<Array2D<u8>> for Shape {
     }
 }
 
-fn get_all_shape_permutations(shape: &Shape) -> Vec<Shape> {
-    let mut permutations = HashSet::new();
-    let mut current_shape = shape.clone();
-    for _ in 0..4 {
-        permutations.insert(current_shape.clone());
-        // Both flips
-        permutations.insert(current_shape.flip_horizontal());
-        permutations.insert(current_shape.flip_vertical());
-
-        current_shape = current_shape.rotate_90();
-    }
-    permutations.into_iter().collect()
-}
-
 fn part_a(question: Question) -> u32 {
     println!("Starting Part A");
-    // Read file until we hit a line with an x in it, and these are space seperated matricies
+    // Read file until we hit a line with an x in it, and these are space separated matrices
     let shapes: Vec<Shape> = get_question_data_as_2d_matrices_lb_sep(ChallengeDay::Day12, question)
         .into_iter()
         .map(Shape::from)
